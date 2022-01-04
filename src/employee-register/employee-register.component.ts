@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Employee } from '../employee';
+import { EmployeeService } from '../employee.service';
+
 
 @Component({
   selector: 'app-employee-register',
@@ -7,9 +10,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EmployeeRegisterComponent implements OnInit {
 
-  constructor() { }
+
+  //Form Backing Object
+  // employee : Employee = new Employee(0,'',0,'','','');
+  employee: any;
+  message : string = '';
+
+  //DI
+  constructor(private service:EmployeeService) { }
 
   ngOnInit() {
+    this.employee = {};
   }
-
+  createEmployee() {
+    this.service.createEmployee(this.employee)
+    .subscribe(data=>{
+      this.message = data;
+      this.employee = new Employee(0,'',0,'','','');
+    },error=>{
+      console.log(error);
+      this.message = 'Unable to save! Contact Admin';
+    });
+  }
 }
